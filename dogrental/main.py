@@ -2,13 +2,14 @@ from fastapi import FastAPI
 
 from . import models
 from .database import engine 
-from .routers import user, tenant, dog
+from .routers import user, tenant, dog, auth
 
 app = FastAPI(title="dog rental API")
 
 
 models.Base.metadata.create_all(engine)
 
+app.include_router(auth.router)
 
 app.include_router(user.router)
 app.include_router(tenant.router)

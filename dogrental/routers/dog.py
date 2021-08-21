@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, status, HTTPException
-from .. import database, models, schemas
+from .. import database, models, schemas, oauth2
 from sqlalchemy.orm import Session
 
 router = APIRouter(
@@ -12,7 +12,7 @@ get_db = database.get_db
 
 
 @router.get('/')
-def all_dog(db:Session = Depends(get_db)):
+def all_dog(db:Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user) ):
 
     dogs = db.query(models.Dog).all()
 
