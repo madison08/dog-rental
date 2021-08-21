@@ -11,7 +11,7 @@ class User(Base):
     lastname = Column(String)
     username = Column(String, unique=True)
     email = Column(String)
-    passord = Column(String)
+    password = Column(String)
 
     tenants = relationship("Tenant", back_populates="creator")
 
@@ -41,5 +41,5 @@ class Tenant(Base):
 
     creator = relationship("User", back_populates="tenants")
 
-    dogss = relationship("Dog", back_populates="owner")
+    dogs = relationship("Dog", back_populates="owner")
 
