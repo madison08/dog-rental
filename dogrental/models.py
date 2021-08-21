@@ -23,7 +23,7 @@ class Dog(Base):
     name = Column(String)
     race = Column(String, default="unknown")
 
-    tenant_id = Column(Integer, ForeignKey('tenant.id'))
+    tenant_id = Column(Integer, ForeignKey('tenants.id'))
 
     owner = relationship("Tenant", back_populates="dogs")
 
