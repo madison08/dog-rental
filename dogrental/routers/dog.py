@@ -20,7 +20,7 @@ def all_dog(db:Session = Depends(get_db), current_user: schemas.User = Depends(o
 
 
 @router.post('/')
-def create_dog(request: schemas.Dog, db: Session = Depends(get_db)):
+def create_dog(request: schemas.Dog, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
     
     newDog = models.Dog(name=request.name, race=request.race, tenant_id = 1)
     db.add(newDog)
@@ -30,7 +30,7 @@ def create_dog(request: schemas.Dog, db: Session = Depends(get_db)):
     return newDog
 
 @router.get('/{id}')
-def show_dog(id: int, db: Session = Depends(get_db)):
+def show_dog(id: int, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
 
     dog = db.query(models.Dog).filter(models.Dog.id == id).first()
 
@@ -43,7 +43,7 @@ def show_dog(id: int, db: Session = Depends(get_db)):
     return dog
 
 @router.delete('/{id}')
-def delete_dog(id: int, db: Session = Depends(get_db)):
+def delete_dog(id: int, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
 
     dog = db.query(models.Dog).filter(models.Dog.id == id)
 
@@ -59,7 +59,7 @@ def delete_dog(id: int, db: Session = Depends(get_db)):
     return {'detail': 'deleted'}
 
 @router.put('/{id}')
-def update_dog(id: int,request: schemas.Dog, db: Session = Depends(get_db)):
+def update_dog(id: int,request: schemas.Dog, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
 
     dog = db.query(models.Dog).filter(models.Dog.id == id)
 

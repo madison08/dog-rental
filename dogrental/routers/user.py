@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, status, HTTPException
-from .. import database, models, schemas, hashing
+from .. import database, models, schemas, hashing, oauth2
 from sqlalchemy.orm import Session
 
 router = APIRouter(
@@ -11,7 +11,7 @@ get_db = database.get_db
 
 
 @router.get('/')
-def all_users(db:Session = Depends(get_db)):
+def all_users(db:Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
 
     users = db.query(models.User).all()
 
@@ -19,7 +19,7 @@ def all_users(db:Session = Depends(get_db)):
 
 
 @router.post('/')
-def create_user(request: schemas.User, db: Session = Depends(get_db)):
+def create_user(request: schemas.User, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
 
     hashedPassword = hashing.Hash.bcrypt(request.password)
 
@@ -31,7 +31,7 @@ def create_user(request: schemas.User, db: Session = Depends(get_db)):
     return newUser
 
 @router.get('/{id}')
-def show_user(id: int, db: Session = Depends(get_db)):
+def show_user(id: int, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
 
     user = db.query(models.User).filter(models.User.id == id).first()
 
@@ -44,7 +44,7 @@ def show_user(id: int, db: Session = Depends(get_db)):
     return user
 
 @router.delete('/{id}')
-def delete_user(id: int, db: Session = Depends(get_db)):
+def delete_user(id: int, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
 
     user = db.query(models.User).filter(models.User.id == id)
 
@@ -60,7 +60,7 @@ def delete_user(id: int, db: Session = Depends(get_db)):
     return {'detail': 'deleted'}
 
 @router.put('/{id}')
-def update_user(id: int,request: schemas.User, db: Session = Depends(get_db)):
+def update_user(id: int,request: schemas.User, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
 
     user = db.query(models.User).filter(models.User.id == id)
 

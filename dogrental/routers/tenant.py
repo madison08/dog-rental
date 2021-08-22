@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, status, HTTPException
-from .. import database, models, schemas
+from .. import database, models, schemas, oauth2
 from sqlalchemy.orm import Session
 
 router = APIRouter(
@@ -12,7 +12,7 @@ get_db = database.get_db
 
 
 @router.get('/')
-def all_tenant(db:Session = Depends(get_db)):
+def all_tenant(db:Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
 
     tenants = db.query(models.Tenant).all()
 
@@ -20,7 +20,7 @@ def all_tenant(db:Session = Depends(get_db)):
 
 
 @router.post('/')
-def create_tenant(request: schemas.Tenant, db: Session = Depends(get_db)):
+def create_tenant(request: schemas.Tenant, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
     
     newTenant = models.Tenant(firstname=request.firstname, lastname=request.lastname, email=request.email, adress=request.adress, user_id=1)
     db.add(newTenant)
@@ -30,7 +30,7 @@ def create_tenant(request: schemas.Tenant, db: Session = Depends(get_db)):
     return newTenant
 
 @router.get('/{id}')
-def show_tenant(id: int, db: Session = Depends(get_db)):
+def show_tenant(id: int, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
 
     tenant = db.query(models.Tenant).filter(models.Tenant.id == id).first()
 
@@ -43,7 +43,7 @@ def show_tenant(id: int, db: Session = Depends(get_db)):
     return tenant
 
 @router.delete('/{id}')
-def delete_tenant(id: int, db: Session = Depends(get_db)):
+def delete_tenant(id: int, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
 
     tenant = db.query(models.Tenant).filter(models.Tenant.id == id)
 
@@ -59,7 +59,7 @@ def delete_tenant(id: int, db: Session = Depends(get_db)):
     return {'detail': 'deleted'}
 
 @router.put('/{id}')
-def update_tenant(id: int,request: schemas.Tenant, db: Session = Depends(get_db)):
+def update_tenant(id: int,request: schemas.Tenant, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
 
     tenant = db.query(models.Tenant).filter(models.Tenant.id == id)
 

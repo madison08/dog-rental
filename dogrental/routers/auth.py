@@ -1,4 +1,4 @@
-from ..token import ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token
+# from ..token import ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token
 # from datetime import timedelta
 from .. import models
 from fastapi import APIRouter, Depends, status, HTTPException
@@ -12,7 +12,7 @@ get_db = database.get_db
 
 
 @router.post('/login')
-def login(request:OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+def login(request: OAuth2PasswordRequestForm= Depends(), db: Session = Depends(get_db)):
     
     user = db.query(models.User).filter(models.User.username == request.username).first()
 
