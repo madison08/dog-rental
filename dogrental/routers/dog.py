@@ -11,7 +11,7 @@ get_db = database.get_db
 
 
 
-@router.get('/')
+@router.get('')
 def all_dog(db:Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user) ):
 
     dogs = db.query(models.Dog).all()
@@ -19,7 +19,7 @@ def all_dog(db:Session = Depends(get_db), current_user: schemas.User = Depends(o
     return dogs
 
 
-@router.post('/')
+@router.post('')
 def create_dog(request: schemas.Dog, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
     
     newDog = models.Dog(name=request.name, race=request.race, tenant_id = 1)

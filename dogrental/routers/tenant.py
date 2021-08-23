@@ -11,7 +11,7 @@ get_db = database.get_db
 
 
 
-@router.get('/')
+@router.get('')
 def all_tenant(db:Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
 
     tenants = db.query(models.Tenant).all()
@@ -19,7 +19,7 @@ def all_tenant(db:Session = Depends(get_db), current_user: schemas.User = Depend
     return tenants
 
 
-@router.post('/')
+@router.post('')
 def create_tenant(request: schemas.Tenant, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
     
     newTenant = models.Tenant(firstname=request.firstname, lastname=request.lastname, email=request.email, adress=request.adress, user_id=1)

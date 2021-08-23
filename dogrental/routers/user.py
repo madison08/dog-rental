@@ -10,7 +10,7 @@ router = APIRouter(
 get_db = database.get_db
 
 
-@router.get('/')
+@router.get('')
 def all_users(db:Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
 
     users = db.query(models.User).all()
@@ -18,7 +18,7 @@ def all_users(db:Session = Depends(get_db), current_user: schemas.User = Depends
     return users
 
 
-@router.post('/')
+@router.post('')
 def create_user(request: schemas.User, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
 
     hashedPassword = hashing.Hash.bcrypt(request.password)
