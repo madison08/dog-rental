@@ -19,7 +19,8 @@ def all_users(db:Session = Depends(get_db), current_user: schemas.User = Depends
 
 
 @router.post('')
-def create_user(request: schemas.User, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
+def create_user(request: schemas.User, db: Session = Depends(get_db)):
+    # , current_user: schemas.User = Depends(oauth2.get_current_user)
 
     hashedPassword = hashing.Hash.bcrypt(request.password)
 
